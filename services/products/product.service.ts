@@ -9,6 +9,9 @@ export const getProducts = async (params: {
 	limit?: number;
 	sort_by?: string;
 	sort_dir?: string;
+	category?: string;
+	min_price?: number;
+	max_price?: number;
 }): Promise<ApiResponse<Product[]> | null> => {
 	try {
 		const response = await axios.get<ApiResponse<Product[]>>(
