@@ -25,14 +25,6 @@ This frontend project is the user interface for the [FastAPI backend project](ht
 
 [https://github.com/LinThitHtwe/dashboard-fastapi-backend](https://github.com/LinThitHtwe/dashboard-fastapi-backend)
 
-## Project Screenshots
-
-Datatable Page
-![Product Data Table](docs/Product_datatable.png)
-
-Infinite Scroll Page
-![Product Infinite Scroll](docs/Product_infinite_scroll.png)
-
 ## Configuration & Setup
 
 Below are the steps to run this project locally
