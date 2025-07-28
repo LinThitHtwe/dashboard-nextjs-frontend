@@ -60,7 +60,7 @@ export default function ProductInfiniteScrollPage() {
 
 	const {
 		data,
-		error,
+		isError,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
@@ -292,6 +292,9 @@ export default function ProductInfiniteScrollPage() {
 						))}
 					</>
 				)}
+				{isError && (
+					<div className="text-red-500 h-1/2 p-4">Something went wrong.</div>
+				)}
 
 				{products &&
 					products.map((product) => (
@@ -311,7 +314,7 @@ export default function ProductInfiniteScrollPage() {
 
 			{!hasNextPage && (
 				<p className="text-center mt-10 text-gray-500 text-sm">
-					You’ve reached the end.
+					You&apos;ve reached the end.
 				</p>
 			)}
 		</div>

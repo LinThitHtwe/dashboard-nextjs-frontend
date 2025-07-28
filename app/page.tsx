@@ -1,5 +1,4 @@
 "use client";
-import { Button } from "@/components/ui/button";
 
 export default function Home() {
 	return (
@@ -10,6 +9,7 @@ export default function Home() {
 				}}>
 				Click me
 			</Button> */}
+			<p>Welcome to the homepage</p>
 		</div>
 	);
 }

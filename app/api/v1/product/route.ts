@@ -3,7 +3,7 @@ import axios from "axios";
 import { ApiResponse } from "@/types/common.type";
 import { Product } from "@/types/product.type";
 
-const BACKEND_API = "http://127.0.0.1:8000/products";
+const BACKEND_API = `${process.env.BACKEND_URL}/products`;
 
 export async function GET(req: NextRequest) {
 	const { searchParams } = new URL(req.url);

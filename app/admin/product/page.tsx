@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getProducts } from "@/services/products/product.service";
 import { ApiResponse } from "@/types/common.type";
 import { Product } from "@/types/product.type";
@@ -68,7 +68,7 @@ const ProductTablePage = () => {
 		name: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_NAME,
 	});
 
-	const { data, isFetching } = useQuery<ApiResponse<Product[]>>({
+	const { data, isFetching, isError } = useQuery<ApiResponse<Product[]>>({
 		queryKey: [
 			"products",
 			filters.skip,
@@ -235,7 +235,7 @@ const ProductTablePage = () => {
 								</Select>
 							</div>
 							<div>
-								<p className="mb-2">Sort Direction</p>
+								<p className="mb-2">Sort Order</p>
 								<Select value={inputSortDir} onValueChange={setInputSortDir}>
 									<SelectTrigger className="w-full">
 										<SelectValue placeholder="Sort direction" />
@@ -265,7 +265,9 @@ const ProductTablePage = () => {
 							)}
 						</div>
 					</div>
-
+					{isError && (
+						<div className="text-red-500 h-1/2 p-4">Something went wrong.</div>
+					)}
 					{isFetching ? (
 						<div className="space-y-2">
 							{[...Array(10)].map((_, i) => (
