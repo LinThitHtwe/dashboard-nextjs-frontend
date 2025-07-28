@@ -35,6 +35,9 @@ import {
 } from "@/constants/common.constant";
 
 const ProductTablePage = () => {
+	const [inputName, setInputName] = useState(
+		PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_NAME
+	);
 	const [inputCategory, setInputCategory] = useState(
 		PRODUCT_CATEGORY_FIELDS[0]
 	);
@@ -62,9 +65,10 @@ const ProductTablePage = () => {
 		category: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_CATEGORY,
 		minPrice: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MIN_PRICE,
 		maxPrice: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MAX_PRICE,
+		name: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_NAME,
 	});
 
-	const { data, isFetching } = useQuery<ApiResponse<Product[]> | null>({
+	const { data, isFetching } = useQuery<ApiResponse<Product[]>>({
 		queryKey: [
 			"products",
 			filters.skip,
@@ -74,8 +78,9 @@ const ProductTablePage = () => {
 			filters.category,
 			filters.minPrice,
 			filters.maxPrice,
+			filters.name,
 		],
-		queryFn: async (): Promise<ApiResponse<Product[]> | null> => {
+		queryFn: async (): Promise<ApiResponse<Product[]>> => {
 			return await getProducts({
 				skip: filters.skip,
 				limit: filters.limit,
@@ -84,9 +89,9 @@ const ProductTablePage = () => {
 				category: filters.category || undefined,
 				min_price: filters.minPrice ? parseFloat(filters.minPrice) : undefined,
 				max_price: filters.maxPrice ? parseFloat(filters.maxPrice) : undefined,
+				name: filters.name || undefined,
 			});
 		},
-		//enabled: true,
 	});
 
 	const handleApplyFilters = () => {
@@ -98,6 +103,7 @@ const ProductTablePage = () => {
 			category: inputCategory == "All" ? "" : inputCategory,
 			minPrice: inputMinPrice,
 			maxPrice: inputMaxPrice,
+			name: inputName,
 		});
 	};
 
@@ -113,12 +119,13 @@ const ProductTablePage = () => {
 	};
 
 	const handleResetFilters = () => {
-		setInputCategory(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_CATEGORY);
+		setInputCategory(PRODUCT_CATEGORY_FIELDS[0]);
 		setInputLimit(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_LIMIT);
 		setInputMinPrice(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MIN_PRICE);
 		setInputMaxPrice(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MAX_PRICE);
 		setInputSortBy(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_SORT_BY);
 		setInputSortDir(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_SORT_DIR);
+		setInputName(PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_NAME);
 		setFilters({
 			skip: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_SKIP,
 			limit: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_LIMIT,
@@ -127,6 +134,7 @@ const ProductTablePage = () => {
 			category: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_CATEGORY,
 			minPrice: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MIN_PRICE,
 			maxPrice: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MAX_PRICE,
+			name: PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_NAME,
 		});
 	};
 
@@ -136,7 +144,8 @@ const ProductTablePage = () => {
 		filters.minPrice !== PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MIN_PRICE ||
 		filters.maxPrice !== PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_MAX_PRICE ||
 		filters.sortBy !== PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_SORT_BY ||
-		filters.sortDir !== PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_SORT_DIR;
+		filters.sortDir !== PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_SORT_DIR ||
+		filters.name !== PRODUCT_DEFAULT_QUERY.DEFAULT_PRODUCT_NAME;
 
 	const products = data?.success ? data.data : [];
 
@@ -148,19 +157,13 @@ const ProductTablePage = () => {
 
 					<div className="grid grid-cols-4 gap-5 ">
 						<div>
-							<p className="mb-2">Category</p>
-							<Select value={inputCategory} onValueChange={setInputCategory}>
-								<SelectTrigger className="w-full">
-									<SelectValue placeholder="Category" />
-								</SelectTrigger>
-								<SelectContent>
-									{PRODUCT_CATEGORY_FIELDS.map((f) => (
-										<SelectItem key={f} value={f}>
-											{f}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+							<p className="mb-2">Name</p>
+							<Input
+								type="text"
+								placeholder="Product Name"
+								value={inputName}
+								onChange={(e) => setInputName(e.target.value)}
+							/>
 						</div>
 						<div>
 							<p className="mb-2">Min Price</p>
@@ -200,6 +203,21 @@ const ProductTablePage = () => {
 					</div>
 
 					<div className="grid grid-cols-3 gap-5">
+						<div>
+							<p className="mb-2">Category</p>
+							<Select value={inputCategory} onValueChange={setInputCategory}>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Category" />
+								</SelectTrigger>
+								<SelectContent>
+									{PRODUCT_CATEGORY_FIELDS.map((category) => (
+										<SelectItem key={category} value={category}>
+											{category}
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+						</div>
 						<div className=" grid grid-cols-2 gap-5">
 							<div>
 								<p className="mb-2">Sort By</p>
@@ -208,9 +226,9 @@ const ProductTablePage = () => {
 										<SelectValue placeholder="Sort by" />
 									</SelectTrigger>
 									<SelectContent>
-										{PRODUCT_SORT_FIELDS.map((f) => (
-											<SelectItem key={f} value={f}>
-												{f}
+										{PRODUCT_SORT_FIELDS.map((sort_by) => (
+											<SelectItem key={sort_by} value={sort_by}>
+												{sort_by}
 											</SelectItem>
 										))}
 									</SelectContent>
@@ -223,15 +241,16 @@ const ProductTablePage = () => {
 										<SelectValue placeholder="Sort direction" />
 									</SelectTrigger>
 									<SelectContent>
-										{SORT_DIRECTIONS.map((d) => (
-											<SelectItem key={d} value={d}>
-												{d}
+										{SORT_DIRECTIONS.map((sort_dir) => (
+											<SelectItem key={sort_dir} value={sort_dir}>
+												{sort_dir}
 											</SelectItem>
 										))}
 									</SelectContent>
 								</Select>
 							</div>
 						</div>
+
 						<div className="flex items-end gap-2 ">
 							<Button className="w-fit" onClick={handleApplyFilters}>
 								Apply

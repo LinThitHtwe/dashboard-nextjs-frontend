@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, Table } from "lucide-react";
+import { Home, Scroll, Table } from "lucide-react";
 
 import {
 	Sidebar,
@@ -11,7 +11,6 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-// Menu items.
 const items = [
 	{
 		title: "Home",
@@ -24,19 +23,9 @@ const items = [
 		icon: Table,
 	},
 	{
-		title: "Products",
-		url: "#",
-		icon: Calendar,
-	},
-	{
-		title: "Search",
-		url: "#",
-		icon: Search,
-	},
-	{
-		title: "Settings",
-		url: "#",
-		icon: Settings,
+		title: "Products Infinite Scroll",
+		url: "/admin/infinite-scroll",
+		icon: Scroll,
 	},
 ];
 
